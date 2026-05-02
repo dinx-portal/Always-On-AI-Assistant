@@ -20,20 +20,22 @@ def run():
         prompt = st.chat_input("Hukum karein Boss...")
         
         if prompt:
-            # Model ka naam update kar diya hai taake error khatam ho jaye
-            model = genai.GenerativeModel('gemini-1.5-flash-latest')
+            # Stable model name format
+            model = genai.GenerativeModel('gemini-1.5-flash')
             
             try:
+                # Is baar hum simple tareeqe se call kar rahe hain
                 response = model.generate_content(prompt)
+                
                 st.chat_message("user").write(prompt)
                 st.chat_message("assistant").write(response.text)
                 
-                # Voice output (Audio generate karna)
+                # Voice output
                 tts = gTTS(text=response.text, lang='hi')
                 tts.save("reply.mp3")
                 st.audio("reply.mp3", format="audio/mp3", autoplay=True)
             except Exception as e:
-                # Agar koi aur masla ho toh yahan dikhayega
                 st.error(f"Ek choti si mushkil hui hai: {e}")
+                st.info("Mashwara: Agar 404 error aaye, toh GitHub par ja kar model ka naam 'gemini-pro' kar ke dekhein.")
     else:
         st.info("Agent is Offline. Upar wala button dabayein.")
