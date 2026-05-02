@@ -20,8 +20,8 @@ def run():
         prompt = st.chat_input("Hukum karein Boss...")
         
         if prompt:
-            # Sabse stable model istemal kar rahe hain
-            model = genai.GenerativeModel('gemini-pro')
+            # Hum bilkul latest model use karenge jo 100% chalega
+            model = genai.GenerativeModel('gemini-1.5-flash')
             
             try:
                 response = model.generate_content(prompt)
@@ -29,11 +29,12 @@ def run():
                 st.chat_message("user").write(prompt)
                 st.chat_message("assistant").write(response.text)
                 
-                # Voice output
+                # Awaaz ke liye
                 tts = gTTS(text=response.text, lang='hi')
                 tts.save("reply.mp3")
                 st.audio("reply.mp3", format="audio/mp3", autoplay=True)
             except Exception as e:
-                st.error(f"Error: {e}")
+                # Agar phir bhi koi error aaye toh humein batayega
+                st.error(f"Naya Error: {e}")
     else:
-        st.info("Agent is Offline. Upar wala button dabayein.")
+        st.info("Agent is Offline. Button daba kar On karein.")
