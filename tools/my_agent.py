@@ -20,21 +20,23 @@ def run():
         prompt = st.chat_input("Hukum karein Boss...")
         
         if prompt:
-            # Hum bilkul latest model use karenge jo 100% chalega
-            model = genai.GenerativeModel('gemini-1.5-flash')
-            
+            # Is format se 404 error khatam ho jayega
             try:
+                model = genai.GenerativeModel('models/gemini-1.5-flash')
                 response = model.generate_content(prompt)
                 
                 st.chat_message("user").write(prompt)
                 st.chat_message("assistant").write(response.text)
                 
-                # Awaaz ke liye
+                # Voice output
                 tts = gTTS(text=response.text, lang='hi')
                 tts.save("reply.mp3")
                 st.audio("reply.mp3", format="audio/mp3", autoplay=True)
             except Exception as e:
-                # Agar phir bhi koi error aaye toh humein batayega
-                st.error(f"Naya Error: {e}")
+                st.error(f"Ek aur koshish: {e}")
+                # Agar phir bhi masla ho toh ye backup model try karega
+                model = genai.GenerativeModel('gemini-pro')
+                response = model.generate_content(prompt)
+                st.chat_message("assistant").write(response.text)
     else:
-        st.info("Agent is Offline. Button daba kar On karein.")
+        st.info("Agent is Offline. Button dabayein.")
